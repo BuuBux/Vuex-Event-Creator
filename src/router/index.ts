@@ -6,17 +6,18 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'EventList',
+    name: 'event-list',
     component: () => import(/* webpackChunkName: "EventList" */ '../views/EventList.vue'),
   },
   {
     path: '/details/:id',
-    name: 'EventDetails',
+    name: 'event-details',
+    props: true,
     component: () => import(/* webpackChunkName: "EventDetails" */ '../views/EventDetails.vue'),
   },
   {
     path: '/create/',
-    name: 'EventCreate',
+    name: 'event-create',
     component: () => import(/* webpackChunkName: "EventCreate" */ '../views/EventCreate.vue'),
   },
 ];

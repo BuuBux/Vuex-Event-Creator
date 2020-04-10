@@ -1,5 +1,5 @@
 <template>
-  <div class=""></div>
+  <div class="event-create-view"></div>
 </template>
 
 <script lang="ts">
