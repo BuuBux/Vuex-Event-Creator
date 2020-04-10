@@ -1,1 +1,1 @@
-# Vuex-event-creator
+# Vuex Event Creator
