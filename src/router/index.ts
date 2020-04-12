@@ -20,6 +20,12 @@ const routes: Array<RouteConfig> = [
     name: 'event-create',
     component: () => import(/* webpackChunkName: "EventCreate" */ '../views/EventCreate.vue'),
   },
+  {
+    path: '/filtered/:organizer',
+    name: 'event-filtered',
+    props: true,
+    component: () => import(/* webpackChunkName: "EventListFiltered" */ '../views/EventListSorted.vue'),
+  },
 ];
 
 const router = new VueRouter({
