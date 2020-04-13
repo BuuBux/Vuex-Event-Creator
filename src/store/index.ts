@@ -1,15 +1,12 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
-import event from '@/store/modules/event';
-import user from '@/store/modules/user';
+import Vuex, { StoreOptions } from 'vuex';
+import event from '@/store/modules/event/event';
+import user from '@/store/modules/user/user';
+import { RootState } from '@/types/StateTyping';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  modules: {
-    event,
-    user,
-  },
+const store: StoreOptions<RootState> = {
   state: {
     categories: [
       'sustainability',
@@ -21,4 +18,10 @@ export default new Vuex.Store({
       'community',
     ],
   },
-});
+  modules: {
+    user,
+    event,
+  },
+};
+
+export default new Vuex.Store(store);

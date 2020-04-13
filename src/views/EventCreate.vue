@@ -7,10 +7,15 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Event } from '@/types/EventTyping';
+import { Action } from 'vuex-class';
+
+const namespace = 'event';
 
 @Component
 export default class EventCreate extends Vue {
-  event: Event = {
+  @Action('createEvent', { namespace }) createEvent;
+
+  public event: Event = {
     id: 0,
     title: '',
     date: '',
@@ -39,13 +44,14 @@ export default class EventCreate extends Vue {
     };
   }
 
-  createEvent() {
-    this.$store.dispatch('createEvent', this.event).then(() => {
-      this.$router.push({ name: 'event-details', params: { id: (this.event.id).toString() } });
-      this.event = this.createFreshEventObject();
-    }).catch(() => {
-      console.log('There was problem with creating your event');
-    });
+  createNewEvent() {
+    this.createEvent(this.event)
+      .then(() => {
+        this.$router.push({ name: 'event-details', params: { id: (this.event.id).toString() } });
+        this.event = this.createFreshEventObject();
+      }).catch(() => {
+        console.log('There was problem with creating your event');
+      });
   }
 }
 </script>

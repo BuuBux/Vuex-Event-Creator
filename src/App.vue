@@ -3,7 +3,7 @@
     <div class="head">
       Vue Event <span class="decorator">Creator</span>
     </div>
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 

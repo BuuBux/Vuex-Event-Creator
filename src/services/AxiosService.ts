@@ -4,8 +4,8 @@ import { Event } from '@/types/EventTyping';
 export default class AxiosService {
   public requestUrl = 'http://localhost:3000/';
 
-  getEvents() {
-    return axios.get(`${this.requestUrl}events`);
+  getEvents(perPage: number, page: number) {
+    return axios.get(`${this.requestUrl}events?_limit=${perPage}&_page=${page}`);
   }
 
   getEventById(id: number) {

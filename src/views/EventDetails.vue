@@ -37,21 +37,23 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { mapState } from 'vuex';
 import NavigationService from '@/services/NavigationService';
+import { State, Action } from 'vuex-class';
 
-@Component({
-  computed: mapState({
-    event: (state) => state.event.event,
-  }),
-})
+const namespace = 'event';
+
+@Component
 export default class EventDetails extends Vue {
   @Prop(String) id: string;
+
+  @State('event', { namespace }) event: Event;
+
+  @Action('fetchEvent', { namespace }) fetchEvent;
 
   public navigationService: NavigationService = new NavigationService();
 
   created() {
-    this.$store.dispatch('event/fetchEvent', this.id);
+    this.fetchEvent(this.id);
   }
 }
 </script>
