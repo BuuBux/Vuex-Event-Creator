@@ -1,19 +1,67 @@
 <template>
   <div class="event-create-view">
-
+    <event-field
+      v-model="event.title"
+      :title="'Event title'"
+      :type="'text'"
+      :placeholder="'Enter your event name'" />
+    <date-picker
+      v-model="event.date" />
+    <event-field
+      v-model="event.location"
+      :title="'Event location'"
+      :type="'text'"
+      :placeholder="'Daytona Beach'" />
+    <event-textarea
+      v-model="event.description"
+      :title="'Event description'"
+      :placeholder="'Say something about this event'" />
+    <event-select
+      :title="'Event time'"
+      v-model="event.time"
+      :options="times" />
+    <event-select
+      :title="'Event category'"
+      v-model="event.category"
+      :options="categories" />
+    <!-- TODO Select attendees -->
+    <button
+      @click="createNewEvent"
+      class="add-new-event-btn"> Add new event </button>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Event } from '@/types/EventTyping';
-import { Action } from 'vuex-class';
+import { Action, State } from 'vuex-class';
+import DatePicker from 'vue2-datepicker';
+import EventField from '@/components/EventField.vue';
+import EventTextarea from '@/components/EventTextarea.vue';
+import EventSelect from '@/components/EventSelect.vue';
+import { User } from '@/types/UserTyping';
 
-const namespace = 'event';
+const namespace = {
+  event: 'event',
+  user: 'user',
+};
 
-@Component
+@Component({
+  components: {
+    EventField,
+    EventTextarea,
+    EventSelect,
+    DatePicker,
+  },
+})
 export default class EventCreate extends Vue {
-  @Action('createEvent', { namespace }) createEvent;
+  @Action('createEvent', { namespace: namespace.event }) createEvent;
+
+  @State('user', { namespace: namespace.user }) user: User;
+
+  @State('categories') categories: string[];
+
+  public times: string[] = [];
 
   public event: Event = {
     id: 0,
@@ -53,8 +101,29 @@ export default class EventCreate extends Vue {
         console.log('There was problem with creating your event');
       });
   }
+
+  mounted() {
+    this.event.organizer = this.user.name;
+    for (let i = 0; i < 24; i += 1) {
+      // TODO Find a way to use shorthand if statment with no-unused-expressions turn on
+      if (i < 10) {
+        this.times.push(`0${i}:00`);
+      } else {
+        this.times.push(`${i}:00`);
+      }
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+  @import '~vue2-datepicker/index.css';
+  @import '../styles/mixins';
+  .event-create-view {
+    max-width: 768px;
+    width: 100%;
+    margin: 0 auto;
+    box-shadow: $shadow;
+    background: #fff;
+  }
 </style>
