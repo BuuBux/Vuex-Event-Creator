@@ -9,7 +9,7 @@
         Prev page
       </router-link>
     </template>
-    <template v-if="eventsTotal > this.page * 4">
+    <template v-if="eventTotal > this.page * 4">
       <router-link :to="{ name: 'event-list', query: { page: page + 1} }" rel="next">
         Next page
       </router-link>
@@ -33,7 +33,7 @@ const namespace = 'event';
 export default class EventList extends Vue {
   @State('events', { namespace }) events: Event[];
 
-  @State('eventsTotal', { namespace }) eventsTotal: number;
+  @State('eventTotal', { namespace }) eventTotal: number;
 
   @Action('fetchEvents', { namespace }) fetchEvents;
 
@@ -41,8 +41,7 @@ export default class EventList extends Vue {
 
   public mounted() {
     this.page = parseInt((this.$route.query.page as string), 10) || 1;
-    this.fetchEvents(4, this.page);
-    console.log(this.events);
+    this.fetchEvents({ perPage: 4, page: this.page });
   }
 }
 </script>

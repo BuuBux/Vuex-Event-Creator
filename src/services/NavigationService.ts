@@ -7,22 +7,31 @@ export default class NavigationService {
 
   public list = 'event-list';
 
-  navigateToDetails(eventId: number) {
+  public creating = 'event-create';
+
+  public navigateToDetails(eventId: number) {
     router.push({ name: this.details, params: { id: (eventId).toString() } })
       .then((r) => {
         console.log(r);
       });
   }
 
-  showOnlyOrganizerEvents(organizer: string) {
+  public showOnlyOrganizerEvents(organizer: string) {
     router.push({ name: this.filtered, params: { organizer } })
       .then((r) => {
         console.log(r);
       });
   }
 
-  goBackToList() {
+  public goBackToList() {
     router.push({ name: this.list })
+      .then((r) => {
+        console.log(r);
+      });
+  }
+
+  public newEvent() {
+    router.push({ name: this.creating })
       .then((r) => {
         console.log(r);
       });

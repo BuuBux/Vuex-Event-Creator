@@ -7,7 +7,7 @@
       <div class="restart-button">
         <button
           @click="navigationService.goBackToList()"
-          class="restarting-button"> Pokaż wszystkie </button>
+          class="restarting-button"> Show all events </button>
       </div>
     </div>
     <event-element

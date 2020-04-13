@@ -8,11 +8,20 @@
         :src="require(`@/assets/${event.category}.jpg`)" />
     </div>
     <div class="event-summary">
-      <h3> {{ event.title }} </h3>
-      <span class="time"> {{ event.date }} @ {{ event.time }} </span>
-      <h5> {{ event.location }} </h5>
-      <p class="description"> {{ event.description }} </p>
-      <span class="attendees"> Attendees: {{ (event.attendees).length }}</span>
+      <div class="event-header">
+        <h3 class="event-title"> {{ event.title }} </h3>
+        <span class="time"> {{ event.date }} @ {{ event.time }} </span>
+      </div>
+      <div class="about-event">
+        <div class="left-side">
+          <h5 class="about-title"> About event </h5>
+          <p class="description"> {{ event.description }} </p>
+        </div>
+        <div class="right-side">
+          <h5 class="location-title"> Location </h5>
+          <p class="location"> {{event.location}} </p>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -32,6 +41,7 @@ export default class EventElement extends Vue {
 
 <style lang="scss" scoped>
   @import '../styles/mixins';
+  @import '../styles/variables';
   .event-element {
     display: flex;
     justify-content: flex-start;
@@ -49,10 +59,55 @@ export default class EventElement extends Vue {
     .event-summary {
       flex: 0 0 65%;
       max-width: 65%;
+      padding: 15px;
+      text-align: left;
+      .event-header {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        align-items: center;
+        span.time, h3.event-title {
+          width: 100%;
+        }
+        h3.event-title {
+          flex: 0 0 65%;
+          max-width: 65%;
+          color: $flame;
+          margin: 0 0 10px 0;
+        }
+        span.time {
+          text-align: right;
+          flex: 0 0 35%;
+          max-width: 35%;
+          font: 400 12px/1.25 'Ubuntu', sans-serif;
+          margin: 0 0 10px 0;
+        }
+      }
     }
     .category-image {
       flex: 0 0 35%;
       max-width: 35%;
+    }
+  }
+  .about-event {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    .left-side, .right-side { width: 100%; }
+    .left-side {
+      max-width: 65%;
+      flex: 0 0 65%;
+    }
+    .right-side {
+      max-width: 35%;
+      flex: 0 0 35%;
+      .location {
+        font: 400 14px/1.25 'Ubuntu', sans-serif;
+      }
+    }
+    h5.about-title, h5.location-title {
+      font: 700 18px/1.25 'Ubuntu', sans-serif;
+      margin: 0 0 10px 0;
     }
   }
   .event-image {

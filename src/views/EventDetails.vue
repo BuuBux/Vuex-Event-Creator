@@ -32,6 +32,14 @@
         </template>
       </p>
     </div>
+    <div class="buttons-wrapper">
+      <button
+        @click="navigationService.goBackToList()"
+        class="event-button"> Show all events </button>
+      <button
+        @click="navigationService.newEvent()"
+        class="event-button"> Create new event </button>
+    </div>
   </div>
 </template>
 
@@ -91,6 +99,41 @@ export default class EventDetails extends Vue {
       margin: 15px 0 0 0;
       background: $flame;
       animation: rollup 2s 1;
+    }
+  }
+  .buttons-wrapper {
+    display: flex;
+    justify-content: space-between;
+    max-width: 768px;
+    width: 100%;
+    margin: 25px auto 0 auto;
+    .event-button {
+      padding: 8px 35px;
+      border: 2px solid $flame;
+      background: transparent;
+      color: $flame;
+      font: 400 14px/1 'Ubuntu', sans-serif;
+      position: relative;
+      transition: color 0.33s linear;
+      z-index: 1;
+      &:before {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 0;
+        left: 0;
+        background: $flame;
+        transition: height 0.33s linear;
+      }
+      &:hover {
+        cursor: pointer;
+        color: #ffffff;
+        &:before {
+          height: 100%;
+        }
+      }
     }
   }
 </style>
