@@ -19,6 +19,18 @@ const state: UserState = {
       id: 'jkl101',
       name: 'Mary Gordon',
     },
+    {
+      id: 'bbx328',
+      name: 'Kamil Kras',
+    },
+    {
+      id: 'aro678',
+      name: 'Jacob Levinsky',
+    },
+    {
+      id: 'pleciak678',
+      name: 'Marcin Kot',
+    },
   ],
 };
 

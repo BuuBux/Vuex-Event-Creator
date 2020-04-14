@@ -24,7 +24,7 @@
       :title="'Event category'"
       v-model="event.category"
       :options="categories" />
-    <!-- TODO Select attendees -->
+    <event-attendees :title="'Add users to event'"/>
     <button
       @click="createNewEvent"
       class="add-new-event-btn"> Add new event </button>
@@ -40,6 +40,7 @@ import EventField from '@/components/EventField.vue';
 import EventTextarea from '@/components/EventTextarea.vue';
 import EventSelect from '@/components/EventSelect.vue';
 import { User } from '@/types/UserTyping';
+import EventAttendees from '@/components/EventAttendees.vue';
 
 const namespace = {
   event: 'event',
@@ -48,6 +49,7 @@ const namespace = {
 
 @Component({
   components: {
+    EventAttendees,
     EventField,
     EventTextarea,
     EventSelect,
@@ -76,16 +78,14 @@ export default class EventCreate extends Vue {
   };
 
   createFreshEventObject() {
-    const { user } = this.$store.state;
-    const id = Math.floor(Math.random() * 10000);
-
+    console.log(this.event);
     return {
-      id,
+      id: 0,
       title: '',
       date: '',
       time: '',
       location: '',
-      organizer: user,
+      organizer: '',
       category: '',
       description: '',
       attendees: [],
@@ -125,5 +125,8 @@ export default class EventCreate extends Vue {
     margin: 0 auto;
     box-shadow: $shadow;
     background: #fff;
+  }
+  .add-new-event-btn {
+    @extend %button-events;
   }
 </style>
