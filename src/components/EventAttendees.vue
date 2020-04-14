@@ -4,10 +4,18 @@
     <ul class="options">
       <li
         @click="addAttendee(user)"
-        :key="index"
-        v-for="(user, index) in filterByUsing(registered)"> {{user.name}} </li>
+        :key="user.id"
+        v-for="user in filterByUsing(registered)"> {{user.name}} </li>
     </ul>
-    {{ attendees }}
+    <div v-if="attendees.length !== 0" class="">
+      <ul>
+        <li
+          :key="user.id"
+          v-for="user in attendees">
+            {{user.name}} <span v-html="icons.trash" @click="removeAttendee(user)" />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -15,6 +23,8 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { User } from '@/types/UserTyping';
+import icons from '@/helpers/icons';
+import { SvgIcons } from '@/types/IconsTyping';
 
 const namespace = 'user';
 
@@ -25,6 +35,8 @@ export default class EventAttendees extends Vue {
   @State('user', { namespace }) user: User;
 
   @State('registeredUsers', { namespace }) registeredUsers: User[];
+
+  public icons: SvgIcons = icons;
 
   public registered: User[] = [];
 
