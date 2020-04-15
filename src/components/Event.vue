@@ -49,7 +49,7 @@ export default class EventElement extends Vue {
     max-width: 768px;
     margin: 0 auto 35px auto;
     background-color: #ffffff;
-    box-shadow: $shadow;
+    @extend %card-shadow-radius;
     &:hover {
       cursor: pointer;
     }
@@ -57,6 +57,7 @@ export default class EventElement extends Vue {
       width: 100%;
     }
     .event-summary {
+      position: relative;
       flex: 0 0 65%;
       max-width: 65%;
       padding: 15px;
@@ -70,23 +71,32 @@ export default class EventElement extends Vue {
           width: 100%;
         }
         h3.event-title {
-          flex: 0 0 65%;
-          max-width: 65%;
+          flex: 0 0 100%;
+          max-width: 100%;
           color: $flame;
           margin: 0 0 10px 0;
         }
         span.time {
-          text-align: right;
-          flex: 0 0 35%;
-          max-width: 35%;
+          clip-path: polygon(0 0, 100% 0, 95% 50%, 100% 100%, 0 100%, 5% 50%);
+          position: absolute;
+          color: $smoke;
+          padding: 7.5px 15px;
+          text-align: center;
+          max-width: 175px;
+          width: 100%;
+          top: -15px;
+          right: 15px;
+          background: $flame;
           font: 400 12px/1.25 'Ubuntu', sans-serif;
-          margin: 0 0 10px 0;
         }
       }
     }
     .category-image {
       flex: 0 0 35%;
       max-width: 35%;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+      overflow: hidden;
     }
   }
   .about-event {

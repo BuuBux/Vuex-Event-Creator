@@ -6,12 +6,12 @@
     v-for="event in events" />
     <template v-if="page !== 1">
       <router-link :to="{ name: 'event-list', query: { page: page - 1} }" rel="prev">
-        Prev page
+        <span v-html="icons.navigation.left" />
       </router-link>
     </template>
     <template v-if="eventTotal > this.page * 4">
       <router-link :to="{ name: 'event-list', query: { page: page + 1} }" rel="next">
-        Next page
+        <span v-html="icons.navigation.right" />
       </router-link>
     </template>
 </div>
@@ -22,6 +22,8 @@ import { Vue, Component } from 'vue-property-decorator';
 import EventElement from '@/components/Event.vue';
 import { Event } from '@/types/EventTyping';
 import { State, Action } from 'vuex-class';
+import icons from '@/helpers/icons';
+import { SvgIcons } from '@/types/IconsTyping';
 
 const namespace = 'event';
 
@@ -36,6 +38,8 @@ export default class EventList extends Vue {
   @State('eventTotal', { namespace }) eventTotal: number;
 
   @Action('fetchEvents', { namespace }) fetchEvents;
+
+  public icons: SvgIcons = icons;
 
   public page = 1;
 

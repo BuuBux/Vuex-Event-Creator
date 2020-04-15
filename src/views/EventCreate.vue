@@ -1,30 +1,37 @@
 <template>
   <div class="event-create-view">
-    <event-field
+    <h2>Set up your event</h2>
+    <h3> About event </h3>
+    <event-input
       v-model="event.title"
-      :title="'Event title'"
-      :type="'text'"
-      :placeholder="'Enter your event name'" />
-    <date-picker
-      v-model="event.date" />
-    <event-field
-      v-model="event.location"
-      :title="'Event location'"
-      :type="'text'"
-      :placeholder="'Daytona Beach'" />
+      title="Event title"
+      type="text"
+      placeholder="Enter your event name" />
     <event-textarea
       v-model="event.description"
-      :title="'Event description'"
-      :placeholder="'Say something about this event'" />
+      title="Event description"
+      placeholder="Say something about this event" />
+    <h3> Event location & time</h3>
+    <event-input
+      v-model="event.location"
+      title="Event location"
+      type="text"
+      placeholder="Daytona Beach" />
+    <date-picker
+      v-model="event.date" />
     <event-select
-      :title="'Event time'"
+      title="Event time"
       v-model="event.time"
       :options="times" />
+    <h3> How would you categorize you event </h3>
     <event-select
-      :title="'Event category'"
+      title="Event category"
       v-model="event.category"
       :options="categories" />
-    <event-attendees :title="'Add users to event'"/>
+    <h3> Make your event event bigger with friends </h3>
+    <event-attendees
+      v-model="event.attendees"
+      title="Add users to event"/>
     <button
       @click="createNewEvent"
       class="add-new-event-btn"> Add new event </button>
@@ -36,7 +43,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { Event } from '@/types/EventTyping';
 import { Action, State } from 'vuex-class';
 import DatePicker from 'vue2-datepicker';
-import EventField from '@/components/EventField.vue';
+import EventInput from '@/components/EventInput.vue';
 import EventTextarea from '@/components/EventTextarea.vue';
 import EventSelect from '@/components/EventSelect.vue';
 import { User } from '@/types/UserTyping';
@@ -50,7 +57,7 @@ const namespace = {
 @Component({
   components: {
     EventAttendees,
-    EventField,
+    EventInput,
     EventTextarea,
     EventSelect,
     DatePicker,
@@ -66,7 +73,6 @@ export default class EventCreate extends Vue {
   public times: string[] = [];
 
   public event: Event = {
-    id: 0,
     title: '',
     date: '',
     time: '',
@@ -78,9 +84,8 @@ export default class EventCreate extends Vue {
   };
 
   createFreshEventObject() {
-    console.log(this.event);
+    console.log(this);
     return {
-      id: 0,
       title: '',
       date: '',
       time: '',
@@ -95,8 +100,8 @@ export default class EventCreate extends Vue {
   createNewEvent() {
     this.createEvent(this.event)
       .then(() => {
-        this.$router.push({ name: 'event-details', params: { id: (this.event.id).toString() } });
-        this.event = this.createFreshEventObject();
+        // this.$router.push({ name: 'event-details', params: { id: (this.event.id).toString() } });
+        // this.event = this.createFreshEventObject();
       }).catch(() => {
         console.log('There was problem with creating your event');
       });
@@ -123,10 +128,12 @@ export default class EventCreate extends Vue {
     max-width: 768px;
     width: 100%;
     margin: 0 auto;
-    box-shadow: $shadow;
+    @extend %card-shadow-radius;
     background: #fff;
+    padding: 35px;
   }
   .add-new-event-btn {
+    margin-top: 35px;
     @extend %button-events;
   }
 </style>

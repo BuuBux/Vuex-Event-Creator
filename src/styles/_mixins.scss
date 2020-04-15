@@ -1,6 +1,13 @@
 @import './variables';
 
-$shadow: 4px 4px 8px 3px rgba(0, 0, 0, 0.12);
+$shadow: 0 9px 18px 0 rgba(0,0,0,.1);
+$radius: 12px;
+
+%card-shadow-radius {
+  box-shadow: $shadow;
+  border-radius: $radius;
+}
+
 %button-events {
   padding: 8px 35px;
   border: 2px solid $flame;

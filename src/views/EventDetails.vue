@@ -3,16 +3,7 @@
     <h2 class="event-detail-title"> {{ event.title }} </h2>
     <div class="event-time-and-place">
       <p> Event: <strong> {{ event.date }} @ {{ event.time }} </strong> </p>
-      <p> Location:
-        <strong>
-          <a
-            title="Find out where it is"
-            target="_blank"
-            :href="`https://www.google.com/search?q=${event.location}`">
-            {{ event.location }}
-          </a>
-        </strong>
-      </p>
+      <p> Location: <strong> {{ event.location }} </strong> </p>
     </div>
     <p class="event-category">Category: <strong>{{ event.category }}</strong></p>
     <p
@@ -25,9 +16,9 @@
     <div class="event-attendees">
       <h4 class="title-header"> Attendees </h4>
       <p>
-        <template v-for="(attende, index) in event.attendees">
+        <template v-for="(attendee, index) in event.attendees">
           <span :key="index">
-            {{(index + 1 !== (event.attendees).length ? `${attende.name}, ` : `${attende.name}`)}}
+            {{(index + 1 !== (event.attendees).length ? `${attendee.name}, ` : `${attendee.name}`)}}
           </span>
         </template>
       </p>
@@ -86,7 +77,7 @@ export default class EventDetails extends Vue {
     padding: 35px;
     max-width: 768px;
     width: 100%;
-    box-shadow: $shadow;
+    @extend %card-shadow-radius;
   }
   .event-detail-title {
     font: 700 48px/1.5 'Ubuntu', sans-serif;
