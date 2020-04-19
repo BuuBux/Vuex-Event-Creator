@@ -37,23 +37,14 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import NavigationService from '@/services/NavigationService';
-import { State, Action } from 'vuex-class';
-
-const namespace = 'event';
 
 @Component
 export default class EventDetails extends Vue {
   @Prop(String) id: string;
 
-  @State('event', { namespace }) event: Event;
-
-  @Action('fetchEvent', { namespace }) fetchEvent;
+  @Prop(Object) event: Event;
 
   public navigationService: NavigationService = new NavigationService();
-
-  created() {
-    this.fetchEvent(this.id);
-  }
 }
 </script>
 

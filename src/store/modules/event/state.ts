@@ -14,6 +14,7 @@ const state: EventState = {
     organizer: '',
     location: '',
   },
+  perPage: 4,
 };
 
 export default state;

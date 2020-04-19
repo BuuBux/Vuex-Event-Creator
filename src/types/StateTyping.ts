@@ -14,6 +14,7 @@ export interface EventState {
   events: Event[];
   eventTotal: number;
   event: Event;
+  perPage: number;
 }
 
 export interface UserState {

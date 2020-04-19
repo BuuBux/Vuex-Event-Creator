@@ -1,8 +1,8 @@
 import { ActionTree } from 'vuex';
 import { Event } from '@/types/EventTyping';
-import { AxiosResponse } from 'axios';
 import { EventState, RootState } from '@/types/StateTyping';
 import AxiosService from '@/services/AxiosService';
+import state from '@/store/modules/event/state';
 
 const axios = new AxiosService();
 
@@ -22,27 +22,28 @@ const actions: ActionTree<EventState, RootState> = {
       commit('SET_EVENTS', filtered);
     }
   },
-  async fetchEvent({ commit, getters }, id) {
+  fetchEvent({ commit, getters }, id) {
     const event = getters.getEventById(id);
     if (event) {
       commit('SET_EVENT', event);
-    } else {
-      try {
-        const response: AxiosResponse = await axios.getEventById(id);
+      return event;
+    }
+    return axios.getEventById(id)
+      .then((response) => {
         commit('SET_EVENT', response.data);
-      } catch (error) {
+        return response.data;
+      }).catch((error) => {
         console.log('There was a problem with this request', error.response);
-      }
-    }
+      });
   },
-  async fetchEvents({ commit }, { perPage, page }) {
-    try {
-      const response: AxiosResponse = await axios.getEvents(perPage, page);
-      commit('SET_EVENTS', response.data);
-      commit('SET_TOTAL_EVENT', response.headers['x-total-count']);
-    } catch (error) {
-      console.log('There was an error:', error.response);
-    }
+  fetchEvents({ commit }, { page }) {
+    return axios.getEvents(state.perPage, page)
+      .then((response) => {
+        commit('SET_EVENTS', response.data);
+        commit('SET_TOTAL_EVENT', response.headers['x-total-count']);
+      }).catch((error) => {
+        console.log('There was an error:', error.response);
+      });
   },
 };
 
