@@ -3,7 +3,9 @@
     <div class="head">
       Vue Event <span class="decorator">Creator</span>
     </div>
-    <router-view :key="$route.fullPath"/>
+    <transition name="fade" mode="out-in">
+      <router-view :key="$route.fullPath"/>
+    </transition>
   </div>
 </template>
 
@@ -16,6 +18,21 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+.fade-enter {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.fade-leave-to {
+  transform: translateX(-10px);
+  opacity: 0;
 }
 
 body {
@@ -46,6 +63,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: $jet;
+  overflow: hidden;
+  min-height: 100vh;
 }
 
 .head {

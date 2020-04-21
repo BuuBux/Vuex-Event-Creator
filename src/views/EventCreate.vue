@@ -1,41 +1,68 @@
 <template>
-  <div class="event-create-view">
-    <h2>Set up your event</h2>
-    <h3> About event </h3>
-    <event-input
-      v-model="event.title"
-      title="Event title"
-      type="text"
-      placeholder="Enter your event name" />
-    <event-textarea
-      v-model="event.description"
-      title="Event description"
-      placeholder="Say something about this event" />
-    <h3> Event location & time</h3>
-    <event-input
-      v-model="event.location"
-      title="Event location"
-      type="text"
-      placeholder="Daytona Beach" />
-    <date-picker
-      v-model="event.date" />
-    <event-select
-      title="Event time"
-      v-model="event.time"
-      :options="times" />
-    <h3> How would you categorize you event </h3>
-    <event-select
-      title="Event category"
-      v-model="event.category"
-      :options="categories" />
-    <h3> Make your event event bigger with friends </h3>
-    <event-attendees
-      v-model="event.attendees"
-      title="Add users to event"/>
-    <button
-      @click="createNewEvent"
-      class="add-new-event-btn"> Add new event </button>
-  </div>
+  <form @submit.prevent="createNewEvent" class="event-create-view">
+    <h2 class="page-header">Set up your event</h2>
+    <div class="about-event">
+      <h3 class="section-header"> About event </h3>
+      <event-input
+        v-model="event.title"
+        @blur="$v.event.title.$touch()"
+        title="Event title"
+        type="text" />
+      <template v-if="$v.event.title.$error">
+        <transition-group appear name="errors" mode="out-in">
+        <p :key="1" v-if="!$v.event.title.required">
+          Title is required
+        </p>
+        <p :key="2" v-if="!$v.event.title.minLength">
+          Title is too short
+        </p>
+        </transition-group>
+      </template>
+      <event-textarea
+        @blur="$v.event.description.touch()"
+        v-model="event.description"
+        title="Event description" />
+    </div>
+    <div class="event-time-location">
+      <h3 class="section-header"> Event location & time</h3>
+      <event-input
+        @blur="$v.event.location.touch()"
+        v-model="event.location"
+        title="Event location"
+        type="text" />
+      <div class="date-wrapper">
+        <date-picker
+          @blur="$v.event.date.touch()"
+          v-model="event.date" />
+        <event-select
+          @blur="$v.event.time.touch()"
+          size="small"
+          title="Set time"
+          selected="selected"
+          disabled="disabled"
+          v-model="event.time"
+          :options="times" />
+      </div>
+    </div>
+    <div class="event-categories">
+      <h3 class="section-header"> How would you categorize you event </h3>
+      <event-select
+        size="full"
+        title="Set event category"
+        selected="selected"
+        disabled="disabled"
+        @blur="$v.event.category.touch()"
+        v-model="event.category"
+        :options="categories" />
+    </div>
+    <div class="invite-friends">
+      <h3 class="section-header"> Make your event even bigger with friends </h3>
+      <event-attendees
+        v-model="event.attendees"
+        title="Add users to event"/>
+    </div>
+    <button class="add-new-event-btn"> Add new event </button>
+  </form>
 </template>
 
 <script lang="ts">
@@ -48,6 +75,8 @@ import EventTextarea from '@/components/EventTextarea.vue';
 import EventSelect from '@/components/EventSelect.vue';
 import { User } from '@/types/UserTyping';
 import EventAttendees from '@/components/EventAttendees.vue';
+import { Validations } from 'vuelidate-property-decorators';
+import { required, minLength } from 'vuelidate/lib/validators';
 
 const namespace = {
   event: 'event',
@@ -82,6 +111,18 @@ export default class EventCreate extends Vue {
     description: '',
     attendees: [],
   };
+
+  @Validations()
+  validations = {
+    event: {
+      title: { required, minLength: minLength(4) },
+      date: { required },
+      time: { required },
+      location: { required },
+      category: { required },
+      description: { required, minLength: minLength(40) },
+    },
+  }
 
   createFreshEventObject() {
     console.log(this);
@@ -127,7 +168,7 @@ export default class EventCreate extends Vue {
   .event-create-view {
     max-width: 768px;
     width: 100%;
-    margin: 0 auto;
+    margin: 0 auto 120px auto;
     @extend %card-shadow-radius;
     background: #fff;
     padding: 35px;
@@ -135,5 +176,34 @@ export default class EventCreate extends Vue {
   .add-new-event-btn {
     margin-top: 35px;
     @extend %button-events;
+  }
+  .page-header {
+    text-align: center;
+    font: 700 24px/1.5 'Ubuntu', sans-serif;
+    color: $flame;
+  }
+  .section-header {
+    text-align: left;
+    font: 700 18px/1.35 'Ubuntu', sans-serif;
+    margin: 0 0 15px 0;
+  }
+  .date-wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    max-width: 385px;
+    width: 100%;
+    margin: 0 auto 25px auto;
+  }
+  .errors-enter {
+    transform: translateX(-35px) scale(0.35);
+  }
+  .errors-enter-active,
+  .errors-leave-active {
+    transition: transform 0.25s ease-in-out;
+  }
+  .errors-leave-to {
+    transform: translateX(35px) scale(0.35);
   }
 </style>

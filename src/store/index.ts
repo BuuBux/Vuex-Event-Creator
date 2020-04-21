@@ -9,13 +9,13 @@ Vue.use(Vuex);
 const store: StoreOptions<RootState> = {
   state: {
     categories: [
-      'sustainability',
-      'nature',
-      'animal welfare',
-      'housing',
-      'education',
-      'food',
-      'community',
+      'Sustainability',
+      'Nature',
+      'Animal welfare',
+      'Housing',
+      'Education',
+      'Food',
+      'Community',
     ],
   },
   modules: {
