@@ -1,6 +1,6 @@
 <template>
   <label :class="size" class="label-time">
-    <select class="event-time" v-model="inputValue">
+    <select v-on="$listeners" class="event-time" v-model="inputValue">
       <option :value="option" :key="index" v-for="(option, index) in options">
         {{option}}
       </option>
@@ -25,7 +25,7 @@ export default class EventField extends Vue {
 
     @Prop(String) size: string;
 
-    public inputValue = '00:00';
+    public inputValue = '';
 
     @Watch('inputValue')
     public updateValue(updateSelectValue: string) {

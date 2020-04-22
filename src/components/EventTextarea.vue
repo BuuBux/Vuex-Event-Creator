@@ -4,6 +4,7 @@
       <span
         class="label-event-textarea"> {{title}} </span>
       <textarea
+        v-on="$listeners"
         @focusin="focused = true"
         class="event-textarea"
         v-bind="$attrs"

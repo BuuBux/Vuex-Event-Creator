@@ -7,10 +7,15 @@ import state from '@/store/modules/event/state';
 const axios = new AxiosService();
 
 const actions: ActionTree<EventState, RootState> = {
-  creatEvent({ commit }, event: Event) {
-    return axios.postEvent(event).then(() => {
-      commit('ADD_EVENT', event);
-    });
+  createEvent({ commit }, event: Event) {
+    return axios.postEvent(event)
+      .then((response) => {
+        commit('ADD_EVENT', event);
+        return response.data;
+      })
+      .catch((err) => {
+        throw err;
+      });
   },
   async filterEvents({ commit, getters, dispatch }, organizer) {
     const events = getters.getEventByOrganizer(organizer);

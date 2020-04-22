@@ -5,7 +5,7 @@
         class="event-image"
         :title="event.title"
         :alt="event.category"
-        :src="require(`@/assets/${event.category}.jpg`)" />
+        :src="require(`@/assets/${(event.category).toLowerCase()}.jpg`)" />
     </div>
     <div class="event-summary">
       <div class="event-header">

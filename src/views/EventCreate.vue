@@ -8,34 +8,25 @@
         @blur="$v.event.title.$touch()"
         title="Event title"
         type="text" />
-      <template v-if="$v.event.title.$error">
-        <transition-group appear name="errors" mode="out-in">
-        <p :key="1" v-if="!$v.event.title.required">
-          Title is required
-        </p>
-        <p :key="2" v-if="!$v.event.title.minLength">
-          Title is too short
-        </p>
-        </transition-group>
-      </template>
       <event-textarea
-        @blur="$v.event.description.touch()"
+        @blur="$v.event.description.$touch()"
         v-model="event.description"
         title="Event description" />
     </div>
     <div class="event-time-location">
       <h3 class="section-header"> Event location & time</h3>
       <event-input
-        @blur="$v.event.location.touch()"
+        @blur="$v.event.location.$touch()"
         v-model="event.location"
         title="Event location"
         type="text" />
       <div class="date-wrapper">
         <date-picker
-          @blur="$v.event.date.touch()"
+          valueType="MMM DD YYYY"
+          @blur="$v.event.date.$touch()"
           v-model="event.date" />
         <event-select
-          @blur="$v.event.time.touch()"
+          @blur="$v.event.time.$touch()"
           size="small"
           title="Set time"
           selected="selected"
@@ -51,7 +42,7 @@
         title="Set event category"
         selected="selected"
         disabled="disabled"
-        @blur="$v.event.category.touch()"
+        @blur="$v.event.category.$touch()"
         v-model="event.category"
         :options="categories" />
     </div>
@@ -61,7 +52,32 @@
         v-model="event.attendees"
         title="Add users to event"/>
     </div>
-    <button class="add-new-event-btn"> Add new event </button>
+    <transition-group class="error-box" appear name="errors" tag="div">
+      <template v-if="$v.event.title.$error">
+        <p :key="1" v-if="!$v.event.title.required"> Title is required </p>
+        <p :key="2" v-if="!$v.event.title.minLength"> Title is too short </p>
+      </template>
+      <template v-if="$v.event.description.$error">
+        <p :key="3" v-if="!$v.event.description.required"> Description is required </p>
+        <p :key="4" v-if="!$v.event.description.minLength"> Description is too short </p>
+      </template>
+      <template v-if="$v.event.location.$error">
+        <p :key="5" v-if="!$v.event.location.required"> Location of event is required </p>
+      </template>
+      <template v-if="$v.event.category.$error">
+        <p :key="6" v-if="!$v.event.category.required"> Category is required </p>
+      </template>
+      <template v-if="$v.event.time.$error">
+        <p :key="7" v-if="!$v.event.time.required"> You need to set time of event </p>
+      </template>
+      <template v-if="$v.event.date.$error">
+        <p :key="8" v-if="!$v.event.date.required"> Date is not set, please fill it up </p>
+      </template>
+    </transition-group>
+    <button :disabled="$v.$anyError" class="add-new-event-btn">
+      Add new event
+    </button>
+    <p class="error-summary" v-if="$v.$anyError"> Please fill out the required fields(s). </p>
   </form>
 </template>
 
@@ -77,6 +93,7 @@ import { User } from '@/types/UserTyping';
 import EventAttendees from '@/components/EventAttendees.vue';
 import { Validations } from 'vuelidate-property-decorators';
 import { required, minLength } from 'vuelidate/lib/validators';
+import NProgress from 'nprogress';
 
 const namespace = {
   event: 'event',
@@ -138,14 +155,22 @@ export default class EventCreate extends Vue {
     };
   }
 
-  createNewEvent() {
-    this.createEvent(this.event)
-      .then(() => {
-        // this.$router.push({ name: 'event-details', params: { id: (this.event.id).toString() } });
-        // this.event = this.createFreshEventObject();
-      }).catch(() => {
+  async createNewEvent() {
+    this.$v.$touch();
+    if (!this.$v.$invalid) {
+      NProgress.start();
+      try {
+        const event = await this.createEvent(this.event);
+        await this.$router.push({
+          name: 'event-details',
+          params: { id: (event.id).toString() },
+        });
+        this.event = this.createFreshEventObject();
+      } catch (error) {
+        NProgress.done();
         console.log('There was problem with creating your event');
-      });
+      }
+    }
   }
 
   mounted() {
@@ -176,6 +201,16 @@ export default class EventCreate extends Vue {
   .add-new-event-btn {
     margin-top: 35px;
     @extend %button-events;
+    &[disabled] {
+      background-color: #F1F1F1;
+      color: #444;
+      border-color: #444;
+      &:hover {
+        &:before {
+          display: none;
+        }
+      }
+    }
   }
   .page-header {
     text-align: center;
@@ -196,6 +231,23 @@ export default class EventCreate extends Vue {
     width: 100%;
     margin: 0 auto 25px auto;
   }
+  .error-box {
+    position: fixed;
+    right: 35px;
+    top: 35px;
+    max-width: 255px;
+    width: 100%;
+    p {
+      text-align: left;
+      border-radius: 6px;
+      box-shadow: 4px 4px 8px 3px rgba(0, 0, 0, 0.12);
+      background: $flame;
+      color: #fff;
+      padding: 8px 25px;
+      font: 700 14px/1.5 'Ubuntu', sans-serif;
+      margin: 0 0 15px 0;
+    }
+  }
   .errors-enter {
     transform: translateX(-35px) scale(0.35);
   }
@@ -205,5 +257,10 @@ export default class EventCreate extends Vue {
   }
   .errors-leave-to {
     transform: translateX(35px) scale(0.35);
+  }
+  .error-summary {
+    color: $flame;
+    margin-top: 15px;
+    font: 700 14px/1.35 'Ubuntu', sans-serif;
   }
 </style>
