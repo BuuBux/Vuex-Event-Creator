@@ -73,6 +73,7 @@ body {
   display: inline-block;
   .decorator {
     color: $flame;
+    text-shadow: 0 0 4px $flame;
   }
 }
 </style>

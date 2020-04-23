@@ -1,6 +1,8 @@
 <template>
   <div class="event-details-view">
-    <h2 class="event-detail-title"> {{ event.title }} </h2>
+    <transition-group tag="h2" class="event-detail-title" name="zoom">
+      <span :key="`${letter-index}`" v-for="(letter, index) in poppingTitle">{{letter}}</span>
+    </transition-group>
     <div class="event-time-and-place">
       <p> Event: <strong> {{ event.date }} @ {{ event.time }} </strong> </p>
       <p> Location: <strong> {{ event.location }} </strong> </p>
@@ -37,14 +39,28 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import NavigationService from '@/services/NavigationService';
+import { Event } from '@/types/EventTyping';
 
 @Component
 export default class EventDetails extends Vue {
   @Prop(String) id: string;
 
-  @Prop(Object) event: Event;
+  @Prop({ required: true }) event: Event;
 
   public navigationService: NavigationService = new NavigationService();
+
+  public poppingTitle: string[] = [];
+
+  public poppingLettersToTitle() {
+    const titleArray = (this.event.title).split('');
+    titleArray.map((letter, i) => setTimeout(() => {
+      this.poppingTitle.push(letter);
+    }, 50 * i));
+  }
+
+  public mounted() {
+    this.poppingLettersToTitle();
+  }
 }
 </script>
 
@@ -73,6 +89,12 @@ export default class EventDetails extends Vue {
   .event-detail-title {
     font: 700 48px/1.5 'Ubuntu', sans-serif;
     padding: 0 0 35px 0;
+    span {
+      min-width: 11.5px;
+      &.zoom-enter-active {
+        display: inline-block;
+      }
+    }
     &:after {
       content: '';
       display: block;
@@ -92,5 +114,22 @@ export default class EventDetails extends Vue {
     .event-button {
       @extend %button-events;
     }
+  }
+  .organizer {
+    strong {
+      transition: color 0.25s ease-in-out;
+      &:hover {
+        cursor: pointer;
+        color: $flame;
+      }
+    }
+  }
+  .zoom-enter {
+    opacity: 0;
+    transform: translateY(75px) scale(3);
+    width: 0;
+  }
+  .zoom-enter-active{
+    transition: all .65s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
 </style>
