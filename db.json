@@ -231,6 +231,26 @@
           "name": "Adam Jahr"
         }
       ]
+    },
+    {
+      "title": "Hey guys lets make a big bbq together",
+      "date": "May 01 2020",
+      "time": "18:00",
+      "location": "Main park in Tarnów",
+      "organizer": "Adam Jahr",
+      "category": "Community",
+      "description": "Lets do bbq in our main park in Tarnów, you can invite as many people as u can. We will eat some food, drink some beer and just having fun all day all night. Have fun guys!",
+      "attendees": [
+        {
+          "id": "bbx328",
+          "name": "Kamil Kras"
+        },
+        {
+          "id": "pleciak678",
+          "name": "Marcin Kot"
+        }
+      ],
+      "id": 11
     }
   ]
 }

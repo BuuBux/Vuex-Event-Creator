@@ -31,7 +31,7 @@ const routes: Array<RouteConfig> = [
     path: '/event/:organizer',
     name: 'event-filtered',
     props: true,
-    component: () => import(/* webpackChunkName: "EventListFiltered" */ '../views/EventListSorted.vue'),
+    component: () => import(/* webpackChunkName: "EventListFiltered" */ '../views/EventSorted.vue'),
   },
   {
     path: '/create',

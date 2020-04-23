@@ -15,7 +15,7 @@
       <div class="about-event">
         <div class="left-side">
           <h5 class="about-title"> About event </h5>
-          <p class="description"> {{ event.description }} </p>
+          <p class="description"> {{ concatDescription(event.description) }} </p>
         </div>
         <div class="right-side">
           <h5 class="location-title"> Location </h5>
@@ -36,6 +36,16 @@ export default class EventElement extends Vue {
   @Prop(Object) event: Event;
 
   public navigationService: NavigationService = new NavigationService();
+
+  public slicePoint = 16;
+
+  public concatDescription(description: string) {
+    const lengthOfDescription = description.split(' ').length;
+    if (lengthOfDescription > this.slicePoint) {
+      return `${description.split(' ').slice(0, this.slicePoint).join(' ')} ...`;
+    }
+    return description;
+  }
 }
 </script>
 
