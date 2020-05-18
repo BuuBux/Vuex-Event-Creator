@@ -1,1 +1,0 @@
-# Vuex Event Creator
