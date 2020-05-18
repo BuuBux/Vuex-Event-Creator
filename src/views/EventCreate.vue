@@ -142,7 +142,6 @@ export default class EventCreate extends Vue {
   }
 
   createFreshEventObject() {
-    console.log(this);
     return {
       title: '',
       date: '',
@@ -168,7 +167,7 @@ export default class EventCreate extends Vue {
         this.event = this.createFreshEventObject();
       } catch (error) {
         NProgress.done();
-        console.log('There was problem with creating your event');
+        throw Error(error);
       }
     }
   }
